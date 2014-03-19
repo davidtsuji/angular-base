@@ -69,7 +69,7 @@ gulp.task('clean', function() {
 gulp.task('watch', function() {
     gulp.watch(['./app/client/styles/**/*.less'], ['styles']);
     gulp.watch(['./app/client/scripts/**/*'], ['scripts']);
-    gulp.watch(['./index.html'], ['markup']);
+    gulp.watch(['././app/client/markup/**/*.html'], ['markup']);
     gulp.watch(['./server.js'], ['server']);
 });
 
