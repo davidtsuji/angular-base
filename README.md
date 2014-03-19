@@ -1,13 +1,27 @@
 # Angualar Base
 
-## Build
+## Setup
 
 ```bash
-make
+npm install -g gulp
+npm install
 ```
 
-## Run the server
+## Build and run the server
 
 ```bash
-make server-start
+gulp
+```
+
+## Run just the server
+
+```bash
+node server.js
+```
+
+
+## Cleanup
+
+```bash
+gulp clean
 ```
