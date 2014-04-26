@@ -45,6 +45,6 @@
     "sc-merge": "0.0.3",
     "sg-styles": "0.0.1",
     "superagent": "^0.17.0",
-    "moldy-file-adapter": "0.0.12"
+    "moldy-file-adapter": "^1.0.1"
   }
 }
