@@ -7,7 +7,5 @@ module.exports = {
 	hasKey: require('sc-haskey'),
 	is: require('sc-is'),
 	merge: require('sc-merge'),
-	moldy: require('moldy'),
-	superagent: require('superagent'),
-	underscore: require('underscore')
+	moldy: require('moldy')
 };

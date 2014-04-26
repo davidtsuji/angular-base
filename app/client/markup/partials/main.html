@@ -1,3 +1,8 @@
 <h1>Main</h1>
 
 <div ng-include="'/partials/nav.html'"></div>
+
+<form ng-submit="self.personCreate()">
+	<input type="text" ng-model="self.data.new.person.name">
+	<button>create person</button>
+</form>

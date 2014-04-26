@@ -7,7 +7,12 @@ var http = require('http');
 var path = require('path');
 var app = require('../../system/server/scripts');
 
+/* Core */
 app.express = express();
+app.modules = require('./modules');
+
+/* App */
+app.models = require('./models');
 app.routes = require('./routes');
 
 // all environments

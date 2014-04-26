@@ -1,8 +1,9 @@
 <nav>
   <ul>
     <li><a href="/">home</a></li>
-    <li><a href="/person/1">david</a></li>
-    <li><a href="/person/2">leonie</a></li>
-    <li><a href="/person/3">max</a></li>
+    <li ng-repeat="person in self.data.people" ng-hide="person.destroying">
+    	<a href="/person/{{person.id}}">{{person.name || '_'}} &lt;{{person.email}}&gt;</a>
+    	<a href="" ng-click="personService.destroy(person)">delete</a>
+    </li>
   </ul>
 </nav>

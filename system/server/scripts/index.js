@@ -11,6 +11,7 @@ app.system.classes = {};
 // app.system.classes.environment = require('./classes/environment.class');
 // app.system.classes.events = require('./classes/events.class');
 // app.system.classes.helpers = require('./classes/helpers.class');
+app.system.classes.models = require('./classes/models.class');
 app.system.classes.route = require('./classes/route.class');
 app.system.classes.routes = require('./classes/routes.class');
 // app.system.classes.services = require('./classes/services.class');
