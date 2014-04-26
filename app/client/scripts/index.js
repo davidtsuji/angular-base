@@ -1,35 +1,15 @@
-var modules = require( './modules' );
+var app = require('../../../system/client/scripts');
 
-/* Main App */
-window.myApp = {
+app.config = require('./config');
+app.controller = require('./controller');
+app.environment = require('./environment');
+app.events = require('./events');
+app.helpers = require('./helpers');
+app.models = require('./models');
+app.routes = require('./routes');
+app.services = require('./services');
 
-  module: angular.module( 'myApp', [ 'ngRoute' ] ).config( modules.routes ),
-  scope: null,
-  controller: function (
-    $scope,
-    $route,
-    $routeParams,
-    $location,
-    mainService,
-    personService
-  ) {
+angular.module('app', ['ngRoute']).config(app.routes.proxy(app.routes));
+app.controller.initialise.$inject = ['$scope', '$route', '$routeParams', '$location'];
 
-    var self = this;
-
-    /* Core */
-    self.scope = window.myApp.scope = $scope;
-    self.scope.$route = $route;
-    self.scope.$routeParams = $routeParams;
-
-    /* Services */
-    self.scope.mainService = mainService;
-    self.scope.personService = personService;
-
-  }
-
-};
-
-/* Services */
-Object.keys( modules.services ).forEach( function ( _key ) {
-  myApp.module.factory( modules.services[ _key ].name, modules.services[ _key ].service );
-} );
+exports = module.exports = app;

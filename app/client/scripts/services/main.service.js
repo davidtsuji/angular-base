@@ -1,22 +1,9 @@
-var modules = require( '../modules' );
+module.exports = process.app.system.classes.service.extend({
 
-exports = module.exports = function () {
-  return new exports.Service();
-};
+	data: {},
 
-exports.Service = modules.classes.service.extend( function () {
-  console.log( 'mainService constructor' )
+	initialise: function () {
+		console.log('initialized', __filename);
+	}
 
-} ).methods( {
-
-  init: function () {
-    console.log( 'mainService class init' );
-  },
-
-  data: {
-    item: {},
-    items: [],
-    new: {}
-  }
-
-} );
+});

@@ -7,16 +7,16 @@ npm install -g gulp
 npm install
 ```
 
-## Build and run the server
+## Build
 
 ```bash
 gulp
 ```
 
-## Run just the server
+## Run the server and watch for changes
 
 ```bash
-node server.js
+gulp run
 ```
 
 

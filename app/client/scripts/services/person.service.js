@@ -1,37 +1,9 @@
-var modules = require( '../modules' );
+module.exports = process.app.system.classes.service.extend({
 
-exports = module.exports = function () {
-  return new exports.Service();
-};
+	data: {},
 
-exports.Service = modules.classes.service.extend( function () {
-  console.log( 'peopleService constructor' )
+	initialise: function () {
+		console.log('initialized', __filename);
+	}
 
-} ).methods( {
-
-  init: function () {
-    var self = this;
-
-    console.log( 'peopleService class init' );
-
-    switch ( self.scope.$routeParams.id ) {
-    case '1':
-      self.data.item.name = 'David';
-      break;
-
-    case '2':
-      self.data.item.name = 'Glen';
-      break;
-    }
-
-  },
-
-  data: {
-    item: {
-      name: ''
-    },
-    items: [],
-    new: {}
-  }
-
-} );
+});

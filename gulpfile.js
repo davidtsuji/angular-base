@@ -1,77 +1,118 @@
 var gulp = require('gulp'),
-    compress = require('gulp-uglify'),
-    less = require('gulp-less'),
-    concat = require('gulp-concat'),
-    browserify = require('gulp-browserify'),
-    livereload = require('gulp-livereload'),
-    bower = require('gulp-bower'),
-    clean = require('gulp-clean'),
-    cluster = require('cluster')
-    path = require('path');
+	browserify = require('gulp-browserify'),
+	cluster = require('cluster'),
+	compress = require('gulp-uglify'),
+	concat = require('gulp-concat'),
+	jshint = require('gulp-jshint'),
+	jshintReporter = require("jshint-stylish"),
+	less = require('gulp-less'),
+	path = require('path'),
+	rename = require('gulp-rename'),
+	shell = require('gulp-shell');
 
-var liveReloadServer = livereload();
+var worker, livereloadServer;
 
-var worker;
+var livereload = function (_file) {
+	return function (_path) {
+		if (livereloadServer) livereloadServer.changed(_file);
+	}
+}
 
-gulp.task('styles', function() {
-    gulp.src('./app/client/styles/index.less')
-        .pipe(less({
-            paths: [ path.join(__dirname, 'less', 'includes') ]
-        }))
-        .pipe(gulp.dest('./public/css'))
-        .pipe(livereload())
+gulp.task("jshint", function () {
+	return gulp.src(["./app/client/scripts/**/*.js", "./app/server/**/*.js", "test/**/*.js"])
+		.pipe(jshint())
+		.pipe(jshint.reporter(jshintReporter));
 });
 
-gulp.task('scripts', function() {
+gulp.task('styles', function () {
 
-    gulp.src(['./app/client/scripts/index.js'])
-        .pipe(browserify({
-            debug : true
-        }))
-        //.pipe(compress())
-        .pipe(concat('../public/app.js'))
-        .pipe(gulp.dest('./public/'))
-        .pipe(livereload())
+	gulp.src(['bower_components/bootstrap/fonts/*'], {
+		base: 'bower_components/bootstrap/fonts'
+	})
+		.pipe(gulp.dest('./public/fonts'));
+
+	return gulp.src('./app/client/styles/index.less')
+		.pipe(less({
+			paths: [path.join(__dirname, 'less', 'includes')]
+		}))
+		.pipe(rename('app.css'))
+		.pipe(gulp.dest('./public/styles'))
+		.on('end', livereload('.css'));
 });
 
-gulp.task('markup', function() {
-
-    gulp.src(['./app/client/markup/**/*.*'])
-        .pipe(gulp.dest('./public/'))
-        .pipe(livereload())
+gulp.task('scriptsApp', ['jshint'], function () {
+	return gulp.src(['./app/client/scripts/index.js'])
+		.pipe(browserify({
+			standalone: 'app',
+			debug: true
+		}))
+		.pipe(rename('app.js'))
+		.pipe(gulp.dest('./public/scripts'))
+		.on('end', livereload('.js'));
 });
 
-gulp.task('server', function() {
-
-    cluster.setupMaster({
-        exec : "./server.js"
-    });
-
-    if (worker) {
-        worker.kill();
-    }
-    worker = cluster.fork();
-
+gulp.task('scriptsLib', ['jshint'], function () {
+	return gulp.src([
+		'./bower_components/jquery/dist/jquery.js',
+		'./bower_components/angular/angular.js',
+		'./bower_components/angular-route/angular-route.js',
+		'./bower_components/bootstrap/dist/js/bootstrap.js'
+	])
+		.pipe(concat('libs.js'))
+		.pipe(gulp.dest('./public/scripts'));
 });
 
-gulp.task('bower', function() {
-    bower()
-        .pipe(gulp.dest('bower_components/'))
+gulp.task('markup', function () {
+	gulp.src(['./app/client/markup/**/*.*'])
+		.pipe(gulp.dest('./public/'))
+		.on('end', livereload('.html'));
 });
 
-gulp.task('clean', function() {
-    gulp.src(['./node_modules', './bower_components', './public'], {read: false})
-        .pipe(clean());
+gulp.task('minifyAppScripts', ['scriptsApp'], function () {
+	return gulp.src(['./public/scripts/app.js'])
+		.pipe(compress())
+		.pipe(rename('app.min.js'))
+		.pipe(gulp.dest('./public/scripts'));
 });
 
-//Works well with this https://chrome.google.com/webstore/detail/livereload/jnihajbhpnppcggbcgedagnkighmdlei
-
-gulp.task('watch', function() {
-    gulp.watch(['./app/client/styles/**/*.less'], ['styles']);
-    gulp.watch(['./app/client/scripts/**/*'], ['scripts']);
-    gulp.watch(['././app/client/markup/**/*.html'], ['markup']);
-    gulp.watch(['./server.js'], ['server']);
+gulp.task('minifyLibsScripts', ['scriptsLib'], function () {
+	return gulp.src('./public/scripts/libs.js')
+		.pipe(compress())
+		.pipe(rename('libs.min.js'))
+		.pipe(gulp.dest('./public/scripts'));
 });
 
-gulp.task('default', ['bower', 'styles', 'scripts', 'markup', 'server', 'watch']);
+gulp.task('test', ['build'], shell.task([
+	'npm test'
+], {
+	ignoreErrors: true
+}));
 
+gulp.task('server', function () {
+	cluster.setupMaster({
+		exec: "./app/server/index.js"
+	});
+
+	if (worker) {
+		worker.kill();
+	}
+	worker = cluster.fork();
+});
+
+gulp.task('watch', function () {
+
+	livereloadServer = require('gulp-livereload')();
+
+	gulp.watch(['./app/client/styles/**/*.less'], ['styles']);
+	gulp.watch(['./system/client/scripts/**/*', './app/client/scripts/**/*'], ['scriptsApp']);
+	gulp.watch(['./app/client/markup/**/*.html'], ['markup']);
+	gulp.watch(['./test/**/*', './testClient/**/*'], ['test']);
+	gulp.watch(['./app/server/**/*'], ['server']);
+	gulp.watch(['./gulpfile.js'], ['default']);
+});
+
+gulp.task('default', ['build', 'minify', 'test']);
+gulp.task('scripts', ['scriptsApp', 'scriptsLib']);
+gulp.task('build', ['styles', 'scripts', 'markup']);
+gulp.task('run', ['default', 'server', 'watch']);
+gulp.task('minify', ['minifyAppScripts', 'minifyLibsScripts']);

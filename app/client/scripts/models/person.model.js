@@ -1,8 +1,8 @@
-var modules = require( '../modules' );
+module.exports = process.app.system.classes.model.extend({
 
-module.exports = modules.classes.model.extend( function () {
-  console.log( 'person.model constructor' );
+	init: function () {
+		this.name = 'me';
+		this._super();
+	}
 
-} ).methods( {
-
-} );
+});
