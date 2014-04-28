@@ -12,14 +12,10 @@ var Config = process.app.system.classes.config.extend({
 	eventsToWaitFor: [
 
 		/* Core */
-		'events.initialised',
+		'environment.initialised',
 		'helpers.initialised',
 		'models.initialised',
-		'services.initialised',
-
-		/* Custom */
-		'ngcontroller.initialised',
-		'ngroutes.initialised'
+		'routes.initialised'
 
 	]
 

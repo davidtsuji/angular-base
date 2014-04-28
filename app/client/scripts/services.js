@@ -1,5 +1,11 @@
 var Services = process.app.system.classes.services.extend({
 
+	initialise: function () {
+
+		/* Initialised */
+		this.app.emit('services.initialised', this);
+	},
+
 	services: {
 
 		'mainService': {

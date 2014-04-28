@@ -2,11 +2,14 @@ var Moldy = process.app.modules.moldy;
 
 var Models = process.app.system.classes.models.extend({
 
-	init: function () {
-		Moldy.use(require('moldy-file-adapter'));
-	},
+	initialise: function () {
 
-	'person': Moldy.extend('person', require('../schemas/person.schema'))
+		/* Init Models */
+		this.person = Moldy.extend('person', require('../schemas/person.schema'));
+
+		/* Initialised */
+		this.app.emit('models.initialised', this);
+	}
 
 });
 

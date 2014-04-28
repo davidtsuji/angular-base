@@ -1,7 +1,7 @@
 var async = process.app.modules.async,
 	Person = process.app.models.person;
 
-module.exports = process.app.system.classes.service.extend({
+module.exports = require('../classes/service.class').extend({
 
 	data: {
 		people: [],
@@ -10,7 +10,7 @@ module.exports = process.app.system.classes.service.extend({
 		}
 	},
 
-	initialise: function () {
+	execute: function () {
 		var self = this;
 
 		async.waterfall([
@@ -28,7 +28,7 @@ module.exports = process.app.system.classes.service.extend({
 	getAllPeople: function (_callback) {
 		var self = this;
 
-		Person.$collection(function (_error, _people) {
+		Person.$find(function (_error, _people) {
 			if (!_error) self.data.people = _people;
 			_callback && _callback(_error);
 		});

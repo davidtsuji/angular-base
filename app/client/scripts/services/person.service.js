@@ -2,14 +2,14 @@ var _ = process.app.modules.underscore,
 	async = process.app.modules.async,
 	Person = process.app.models.person;
 
-module.exports = process.app.system.classes.service.extend({
+module.exports = require('../classes/service.class').extend({
 
 	data: {
 		people: [],
 		person: {}
 	},
 
-	initialise: function () {
+	execute: function () {
 		var self = this,
 			personId = self.scope.$routeParams.id;
 
@@ -45,7 +45,7 @@ module.exports = process.app.system.classes.service.extend({
 	getAllPeople: function (_callback) {
 		var self = this;
 
-		Person.$collection(function (_error, _people) {
+		Person.$find(function (_error, _people) {
 			if (!_error) self.data.people = _people;
 			_callback && _callback(_error);
 		});
@@ -54,7 +54,7 @@ module.exports = process.app.system.classes.service.extend({
 	getPersonById: function (_id, _callback) {
 		var self = this;
 
-		Person.$get({
+		Person.$findOne({
 			id: _id
 		}, function (_error, _person) {
 			self.data.person = _person;

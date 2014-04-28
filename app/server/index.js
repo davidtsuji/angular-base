@@ -2,16 +2,19 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var http = require('http');
-var path = require('path');
-var app = require('../../system/server/scripts');
+var express = require('express'),
+	http = require('http'),
+	path = require('path'),
+	app = require('../../system/server/scripts');
 
 /* Core */
 app.express = express();
 app.modules = require('./modules');
+app.config = require('./config');
+app.environment = require('./environment');
 
 /* App */
+app.helpers = require('./helpers');
 app.models = require('./models');
 app.routes = require('./routes');
 
@@ -29,10 +32,14 @@ if ('development' === app.express.get('env')) {
 	app.express.use(express.errorHandler());
 }
 
-app.routes.initialise();
+app.routes.define();
 
 http.createServer(app.express).listen(app.express.get('port'), function () {
 	console.log('Express server listening on port ' + app.express.get('port'));
 	console.log('Current directory: ' + process.cwd());
 	console.log('Current __dirname: ' + __dirname);
+});
+
+app.once('initialised', function () {
+	console.log('initialised');
 });

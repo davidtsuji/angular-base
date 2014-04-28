@@ -2,17 +2,27 @@ var debounce = process.app.modules.debounce;
 
 var Events = process.app.system.classes.events.extend({
 
-	data: debounce(function () {
-		this.app.scope.$apply();
-	}),
+	/* Class initialiser */
+	initialise: function () {
 
+		/* Initialised */
+		this.app.emit('events.initialised', this);
+	},
+
+	/* When an error occurs */
 	error: function (_error) {
 		console.error(_error);
 	},
 
-	initialised: function () {},
+	/* When the app is initialised */
+	initialised: function () {
+		// console.log('app.event.initialised');
+	},
 
-	route: function () {}
+	/* When a route changes */
+	route: function () {
+		// console.log('route', arguments);
+	}
 
 });
 

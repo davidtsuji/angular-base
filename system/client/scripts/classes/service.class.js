@@ -1,5 +1,1 @@
-module.exports = require('./base.class').extend({
-
-	initialise: function () {}
-
-});
+module.exports = require('./base.class').extend({});

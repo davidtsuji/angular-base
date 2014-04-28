@@ -2,15 +2,10 @@ var Person = process.app.models.person;
 
 module.exports = process.app.system.classes.route.extend({
 
-	init: function () {
-		this._super();
-		this.name = 'person';
-	},
+	initialise: function () {},
 
-	collection: function (_req, _res) {
-		var id = _req.params.id || 0;
-
-		Person.$collection(function (_error, _people) {
+	find: function (_req, _res) {
+		Person.$find(function (_error, _people) {
 			if (_error) return _res.json(_error);
 
 			var people = [];
@@ -31,12 +26,10 @@ module.exports = process.app.system.classes.route.extend({
 	},
 
 	getById: function (_req, _res) {
-		var id = _req.params.id || 0;
-
-		Person.$get({
+		Person.$findOne({
 			id: _req.params.id
 		}, function (_error, _person) {
-			_res.json(_error || _person.length > 0 ? _person[0].$json() : {});
+			_res.json(_error || _person.$json());
 		});
 	},
 
