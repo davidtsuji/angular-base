@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+
+	<!-- Test dependencies -->
+	<link rel="stylesheet" href="../node_modules/mocha/mocha.css">
+	<script src="poly.js"></script>
+	<script src="../node_modules/mocha/mocha.js"></script>
+	<script src="../node_modules/should/should.js"></script>
+
+	<!-- Lib -->
+	<script src="../public/scripts/libs.js"></script>
+
+</head>
+<body>
+
+	<div id="mocha"></div>
+
+	<iframe src="http://localhost:3000" frameborder="0"></iframe>
+	
+	<script>
+		mocha.ui('bdd');
+		mocha.reporter('html');
+	</script>
+	<script src="angular.js"></script>
+	<script>
+		if (window.mochaPhantomJS) { mochaPhantomJS.run(); }
+		else { mocha.run(); }
+	</script>
+</body>
+</html>

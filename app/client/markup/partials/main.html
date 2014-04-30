@@ -2,7 +2,7 @@
 
 <div ng-include="'/partials/nav.html'"></div>
 
-<form ng-submit="self.personCreate()">
-	<input type="text" ng-model="self.data.new.person.name">
+<form name="personForm" ng-submit="self.personCreate()">
+	<input name="name" type="text" ng-model="self.data.new.person.name">
 	<button>create person</button>
 </form>

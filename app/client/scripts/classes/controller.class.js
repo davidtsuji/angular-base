@@ -1,0 +1,1 @@
+module.exports = Grailed.classes.base.extend();

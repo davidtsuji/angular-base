@@ -1,5 +1,4 @@
 module.exports = {
-	async: require('async'),
 	debounce: require('debounce'),
 	emitter: require('emitter-component'),
 	extendify: require('sc-extendify'),
@@ -8,6 +7,4 @@ module.exports = {
 	is: require('sc-is'),
 	merge: require('sc-merge'),
 	moldy: require('moldy'),
-	superagent: require('superagent'),
-	underscore: require('underscore')
 };

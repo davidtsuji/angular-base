@@ -3,7 +3,7 @@
     <li><a href="/">home</a></li>
     <li ng-repeat="person in self.data.people" ng-hide="person.destroying">
     	<a href="/person/{{person.id}}">{{person.name || '_'}} &lt;{{person.email}}&gt;</a>
-    	<a href="" ng-click="personService.destroy(person)">delete</a>
+    	<a href="" ng-click="personController.destroy(person)">delete</a>
     </li>
   </ul>
 </nav>
